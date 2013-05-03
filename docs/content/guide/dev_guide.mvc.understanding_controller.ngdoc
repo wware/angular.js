@@ -283,6 +283,59 @@ describe('state', function() {
 });
 </pre>
 
+Functions or methods in a controller can be tested as well. Rather than take arguments or return values
+directly, they are more likely to read and write attributes on the scope, as shown below, because that's
+compatible with how data binding works.
+
+<pre>
+function PasswordCtrl($scope) {
+    $scope.password = '';
+    $scope.grade = function() {
+        var size = $scope.password.length;
+        if (size > 8) {
+            $scope.strength = 'strong';
+        } else if (size > 3) {
+            $scope.strength = 'medium';
+        } else {
+            $scope.strength = 'weak';
+        }
+    }
+}
+</pre>
+
+and the test is straight forward
+
+<pre>
+describe('myController function', function() {
+
+    describe('myController', function() {
+        var scope, ctrl;
+
+        beforeEach(inject(function($rootScope, $controller) {
+            scope = $rootScope.$new();
+            $controller(PasswordCtrl, {$scope: scope});
+        }));
+
+        it('should grade short passwords as weak', function() {
+            scope.password = 'abc';
+            scope.grade();
+            expect(scope.strength).toEqual('weak');
+        });
+
+        it('should grade long passwords as strong', function() {
+            scope.password = 'abcdefghijklm';
+            scope.grade();
+            expect(scope.strength).toEqual('strong');
+        });
+    });
+});
+</pre>
+
+Notice that the test is not only much shorter but it is easier to follow what is going on. We say
+that such a test tells a story, rather then asserting random bits which don't seem to be related.
+
+
+
 
 ## Related Topics
 
