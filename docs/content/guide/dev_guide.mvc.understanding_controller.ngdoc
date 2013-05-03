@@ -306,9 +306,9 @@ function PasswordCtrl($scope) {
 and the test is straight forward
 
 <pre>
-describe('myController function', function() {
+describe('PasswordCtrl test', function() {
 
-    describe('myController', function() {
+    describe('PasswordCtrlTest', function() {
         var scope;
 
         beforeEach(inject(function($rootScope, $controller) {
